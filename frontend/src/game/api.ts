@@ -2,6 +2,19 @@ import { O } from "./FanoronaTelo";
 
 const apiBaseUrl = import.meta.env.VITE_API_URL || "/api";
 
+export async function wakeUpServer(signal?: AbortSignal) {
+  const response = await fetch(`${apiBaseUrl}/health`, {
+    method: "GET",
+    signal,
+  });
+
+  if (!response.ok) {
+    throw new Error(`Wake-up failed: ${response.status}`);
+  }
+
+  return response.json();
+}
+
 export class GetBestMoveIa {
   async bestMoveTicTacToe(newBoard: number[], nextTurn: number) {
     try {

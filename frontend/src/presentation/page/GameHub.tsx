@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 // Importez vos jeux ici (ajustez les chemins selon votre structure)
+import { wakeUpServer } from "@/game/api";
 import TicTacToe from "@/presentation/components/TicTacToe";
 import FanoronaTelo from "@/presentation/components/FanoronaTelo";
 import Puissance4 from "@/presentation/components/Puissance4";
@@ -9,6 +10,55 @@ type GameType = "tictactoe" | "fanorona" | "puissance4" | null;
 
 const GameHub = () => {
   const [activeGame, setActiveGame] = useState<GameType>(null);
+  const [isBooting, setIsBooting] = useState(true);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    const wakeServer = async () => {
+      try {
+        await wakeUpServer(controller.signal);
+      } catch (error) {
+        if (!(error instanceof DOMException && error.name === "AbortError")) {
+          console.error("Wake-up server error:", error);
+        }
+      } finally {
+        window.clearTimeout(fallbackTimer);
+        setIsBooting(false);
+      }
+    };
+
+    const fallbackTimer = window.setTimeout(() => {
+      setIsBooting(false);
+      controller.abort();
+    }, 7000);
+
+    void wakeServer();
+
+    return () => {
+      window.clearTimeout(fallbackTimer);
+      controller.abort();
+    };
+  }, []);
+
+  if (isBooting) {
+    return (
+      <div className="min-h-screen bg-color text-white font-sans px-4">
+        <div className="mx-auto flex min-h-screen max-w-2xl flex-col items-center justify-center text-center">
+          <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full border border-cyan-400/20 bg-cyan-400/10">
+            <span className="thinking-spinner h-9 w-9" aria-hidden="true" />
+          </div>
+          <h1 className="mb-3 text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">
+            Préparation de l'arcade
+          </h1>
+          <p className="max-w-md text-base text-slate-300">
+            Réveil du serveur en cours pour éviter un premier chargement trop
+            long au lancement d'une partie.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   // --- RENDU DU JEU ACTIF ---
   // Si un jeu est sélectionné, on l'affiche avec un bouton de retour

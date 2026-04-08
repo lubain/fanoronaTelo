@@ -37,6 +37,10 @@ class GameResponse(BaseModel):
     next_turn: int
     message: str
 
+@app.get("/health")
+def health_check():
+    return {"status": "ok"}
+
 @app.post("/best-move", response_model=GameResponse)
 def get_best_move(request: GameRequest):
     # Validation personnalisée pour le contenu du tableau et le joueur
