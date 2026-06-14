@@ -8,7 +8,11 @@
   --muted: #71717a;
   --muted2: #a1a1aa;
 
-  /* Game accents */
+  /* Go accent */
+  --go-a: #e2c96e;
+  --go-b: #f5dfa0;
+  --go-board: #1a1508;
+  --go-line: rgba(180, 150, 80, 0.3);
   --ttt-a: #60a5fa;
   --ttt-b: #93c5fd;
   --fan-a: #34d399;
@@ -736,6 +740,312 @@ body {
     transform: scale(1);
     opacity: 1;
   }
+}
+
+/* ── JEU DE GO ───────────────────────────────────────────── */
+.go-accent {
+  background: linear-gradient(135deg, var(--go-a), var(--go-b));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.card-go:hover {
+  border-color: rgba(226, 201, 110, 0.45);
+  box-shadow: 0 0 32px rgba(226, 201, 110, 0.12);
+}
+.card-go::before {
+  background: radial-gradient(
+    ellipse at 80% 20%,
+    rgba(226, 201, 110, 0.06),
+    transparent 60%
+  );
+}
+.card-go:hover::before {
+  opacity: 1;
+}
+.card-go .hub-card-icon {
+  background: rgba(226, 201, 110, 0.1);
+  color: var(--go-a);
+}
+.card-go .hub-card-tagline {
+  color: var(--go-a);
+}
+.card-go .hub-card-cta {
+  background: rgba(226, 201, 110, 0.12);
+  color: var(--go-b);
+}
+.card-go:hover .hub-card-cta {
+  background: rgba(226, 201, 110, 0.22);
+}
+
+/* Captures bar */
+.go-captures {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 0.82rem;
+  color: var(--muted2);
+}
+.go-capture-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-weight: 500;
+}
+.go-stone-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.black-dot {
+  background: #e8e8e8;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+.white-dot {
+  background: #222;
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+}
+.go-captures-sep {
+  color: var(--muted);
+}
+.go-pass-btn {
+  margin-left: auto;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--go-a);
+  background: rgba(226, 201, 110, 0.1);
+  border: 1px solid rgba(226, 201, 110, 0.25);
+  border-radius: 8px;
+  padding: 0.3rem 0.8rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.go-pass-btn:hover:not(:disabled) {
+  background: rgba(226, 201, 110, 0.2);
+}
+.go-pass-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+/* Board container */
+.go-board-container {
+  position: relative;
+}
+
+.go-board {
+  position: relative;
+  background: #1c1608;
+  border-radius: 14px;
+  border: 2px solid rgba(180, 150, 80, 0.2);
+  box-shadow:
+    inset 0 0 40px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.04);
+  padding: 0;
+  transition:
+    filter 0.2s,
+    opacity 0.2s;
+  line-height: 0;
+}
+
+/* SVG unique qui contient lignes + pierres */
+.go-svg {
+  display: block;
+  width: min(420px, 92vw);
+  height: min(420px, 92vw);
+  border-radius: 12px;
+}
+
+/* Classes legacy gardées pour compatibilité mais non utilisées par le nouveau rendu */
+.go-grid-svg {
+  display: none;
+}
+.go-intersections {
+  display: none;
+}
+
+/* Stones (gardées au cas où) */
+.go-stone {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: transform 0.1s;
+}
+.go-black {
+  background: radial-gradient(circle at 35% 30%, #555, #111 60%, #000);
+  box-shadow:
+    1px 2px 4px rgba(0, 0, 0, 0.7),
+    inset 0 1px 1px rgba(255, 255, 255, 0.15);
+}
+.go-white {
+  background: radial-gradient(circle at 35% 30%, #fff, #ddd 60%, #aaa);
+  box-shadow:
+    1px 2px 4px rgba(0, 0, 0, 0.5),
+    inset 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+.go-ghost {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #777, #333 60%, #111);
+  opacity: 0.45;
+}
+.just-placed {
+  animation: placeStone 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+@keyframes placeStone {
+  from {
+    transform: scale(0.3);
+    opacity: 0.4;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+.go-last-dot {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.go-black .go-last-dot {
+  background: rgba(255, 255, 255, 0.6);
+}
+.go-white .go-last-dot {
+  background: rgba(0, 0, 0, 0.5);
+}
+.go-stone.atari {
+  box-shadow:
+    0 0 0 2px #f87171,
+    1px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+/* Score modal */
+.go-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(6px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.go-modal {
+  background: #111113;
+  border: 1px solid rgba(226, 201, 110, 0.25);
+  border-radius: 20px;
+  padding: 2rem;
+  max-width: 380px;
+  width: 100%;
+  box-shadow: 0 0 60px rgba(226, 201, 110, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  animation: popIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+.go-modal-title {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  font-weight: 600;
+}
+.go-modal-winner {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--go-a);
+  letter-spacing: -0.02em;
+}
+.go-modal-margin {
+  font-size: 0.875rem;
+  color: var(--muted2);
+}
+.go-score-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+.go-score-table th,
+.go-score-table td {
+  padding: 0.45rem 0.75rem;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+.go-score-table th {
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.go-score-table td:first-child {
+  text-align: left;
+  color: var(--muted2);
+}
+.go-score-total td {
+  font-weight: 700;
+  color: var(--text);
+  border-bottom: none;
+}
+.go-score-total td:first-child {
+  color: var(--muted2);
+}
+.go-modal-close {
+  margin-top: 0.5rem;
+  padding: 0.55rem 1.5rem;
+  border-radius: 10px;
+  background: rgba(226, 201, 110, 0.12);
+  color: var(--go-a);
+  border: 1px solid rgba(226, 201, 110, 0.25);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.go-modal-close:hover {
+  background: rgba(226, 201, 110, 0.22);
+}
+
+.go-show-score-btn {
+  padding: 0.55rem 1.25rem;
+  border-radius: 10px;
+  background: rgba(226, 201, 110, 0.1);
+  color: var(--go-a);
+  border: 1px solid rgba(226, 201, 110, 0.2);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.go-show-score-btn:hover {
+  background: rgba(226, 201, 110, 0.2);
+}
+
+.go-legend {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  font-size: 0.72rem;
+  color: var(--muted);
+  letter-spacing: 0.04em;
 }
 
 /* ── RESPONSIVE ───────────────────────────────────────────── */
