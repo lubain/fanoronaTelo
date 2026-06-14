@@ -82,4 +82,73 @@ export const GAMES = [
     ),
     cta: "Lancer →",
   },
+  {
+    id: "go" as GameType,
+    title: "Jeu de Go",
+    tagline: "L'art de l'influence",
+    desc: "Posez vos pierres sur un goban 9×9, capturez les groupes adverses et contrôlez le territoire. Ko, atari, komi — la profondeur du Go.",
+    badge: "Expert",
+    accentClass: "card-go",
+    icon: (
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+        <rect
+          x="4"
+          y="4"
+          width="40"
+          height="40"
+          rx="4"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          opacity=".4"
+        />
+        <line
+          x1="4"
+          y1="17"
+          x2="44"
+          y2="17"
+          stroke="currentColor"
+          strokeWidth="1"
+          opacity=".4"
+        />
+        <line
+          x1="4"
+          y1="31"
+          x2="44"
+          y2="31"
+          stroke="currentColor"
+          strokeWidth="1"
+          opacity=".4"
+        />
+        <line
+          x1="17"
+          y1="4"
+          x2="17"
+          y2="44"
+          stroke="currentColor"
+          strokeWidth="1"
+          opacity=".4"
+        />
+        <line
+          x1="31"
+          y1="4"
+          x2="31"
+          y2="44"
+          stroke="currentColor"
+          strokeWidth="1"
+          opacity=".4"
+        />
+        <circle cx="17" cy="17" r="6" fill="currentColor" />
+        <circle
+          cx="31"
+          cy="31"
+          r="6"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+        />
+        <circle cx="24" cy="24" r="2.5" fill="currentColor" opacity=".5" />
+      </svg>
+    ),
+    cta: "Jouer →",
+  },
 ];
