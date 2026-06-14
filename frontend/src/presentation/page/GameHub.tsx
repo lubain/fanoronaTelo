@@ -4,6 +4,7 @@ import { GAMES } from "@/domain/constants";
 import TicTacToeGame from "@/presentation/page/TicTacToeGame";
 import FanoronaGame from "@/presentation/page/FanoronaGame";
 import Puissance4Game from "@/presentation/page/Puissance4Game";
+import GoGame from "./GoGame";
 
 function HubHome({ onSelect }: { onSelect: (g: GameType) => void }) {
   return (
@@ -53,6 +54,7 @@ export default function GameHub() {
     return <FanoronaGame onBack={() => setActiveGame(null)} />;
   if (activeGame === "puissance4")
     return <Puissance4Game onBack={() => setActiveGame(null)} />;
+  if (activeGame === "go") return <GoGame onBack={() => setActiveGame(null)} />;
 
   return <HubHome onSelect={setActiveGame} />;
 }
